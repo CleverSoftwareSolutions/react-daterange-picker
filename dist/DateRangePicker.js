@@ -233,7 +233,8 @@ var DateRangePicker = _react2['default'].createClass({
         range: s.range,
         state: s.state,
         selectable: def.get('selectable', true),
-        color: def.get('color')
+        color: def.get('color'),
+        customClass: def.get('customClass', '')
       });
     });
   },
@@ -268,13 +269,17 @@ var DateRangePicker = _react2['default'].createClass({
     var blockedRanges = this.nonSelectableStateRanges().map(function (r) {
       return r.get('range');
     });
-    if (this.props.fullDayStates)
+    if (this.props.fullDayStates) {
       // range.intersect() ignores when one range ends on the same day
       // the other begins; for the block to work, we have to extend the
       // ranges by one day.
       blockedRanges = blockedRanges.map(function (r) {
-        r = r.clone();r.start.subtract(1, 'day');r.end.add(1, 'day');return r;
+        r = r.clone();
+        r.start.subtract(1, 'day');
+        r.end.add(1, 'day');
+        return r;
       });
+    }
     var intersect = undefined;
 
     if (forwards) {

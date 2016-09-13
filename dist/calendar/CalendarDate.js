@@ -70,7 +70,8 @@ var CalendarDate = _react2['default'].createClass({
     dateRangesForDate: _react2['default'].PropTypes.func,
     onHighlightDate: _react2['default'].PropTypes.func,
     onUnHighlightDate: _react2['default'].PropTypes.func,
-    onSelectDate: _react2['default'].PropTypes.func
+    onSelectDate: _react2['default'].PropTypes.func,
+    fullDayStates: _react2['default'].PropTypes.bool
   },
 
   getInitialState: function getInitialState() {
@@ -189,6 +190,7 @@ var CalendarDate = _react2['default'].createClass({
     var numStates = states.count();
     var cellStyle = {};
     var style = {};
+    var customClass = undefined;
 
     var highlightModifier = undefined;
     var selectionModifier = undefined;
@@ -210,9 +212,9 @@ var CalendarDate = _react2['default'].createClass({
     if (this.props.fullDayStates || numStates === 1) {
       // If there's only one state, it means we're not at a boundary
       color = states.getIn([0, 'color']);
+      customClass = states.getIn([0, 'customClass']);
 
       if (color) {
-
         style = {
           backgroundColor: color
         };
@@ -233,7 +235,10 @@ var CalendarDate = _react2['default'].createClass({
         cellStyle.borderRightColor = (0, _utilsLightenDarkenColor2['default'])(pmColor, -10);
       }
     }
-
+    var elementClass = this.cx({ element: "FullDateStates" });
+    if (customClass) {
+      elementClass += ' ' + customClass;
+    }
     return _react2['default'].createElement(
       'td',
       { className: this.cx({ element: 'Date', modifiers: bemModifiers, states: bemStates }),
@@ -248,7 +253,7 @@ var CalendarDate = _react2['default'].createClass({
         _react2['default'].createElement(_CalendarDatePeriod2['default'], { period: 'am', color: amColor }),
         _react2['default'].createElement(_CalendarDatePeriod2['default'], { period: 'pm', color: pmColor })
       ),
-      numStates === 1 && _react2['default'].createElement('div', { className: this.cx({ element: "FullDateStates" }), style: style }),
+      numStates === 1 && _react2['default'].createElement('div', { className: elementClass, style: style }),
       _react2['default'].createElement(
         'span',
         { className: this.cx({ element: "DateLabel" }) },
