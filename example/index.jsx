@@ -107,11 +107,13 @@ const Index = React.createClass({
       enquire: {
         color: '#ffd200',
         label: 'Enquire',
+        customClass: 'enquire'
       },
       unavailable: {
         selectable: false,
         color: '#78818b',
         label: 'Unavailable',
+        customClass: 'unavailable'
       },
     };
 
@@ -188,6 +190,21 @@ const Index = React.createClass({
                 numberOfCalendars={2}
                 selectionType="single"
                 minimumDate={new Date()} />
+            </div>
+            <div className="example">
+              <h4>With full day states</h4>
+              <DatePickerRange
+                firstOfWeek={1}
+                numberOfCalendars={2}
+                selectionType='range'
+                minimumDate={new Date()}
+                maximumDate={moment().add(2, 'years').toDate()}
+                stateDefinitions={stateDefinitions}
+                dateStates={dateRanges}
+                defaultState="available"
+                value={moment.range(initialStart, initialEnd)}
+                fullDayStates={true}
+                />
             </div>
           </div>
         </div>

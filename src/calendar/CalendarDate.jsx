@@ -39,6 +39,7 @@ const CalendarDate = React.createClass({
     onHighlightDate: React.PropTypes.func,
     onUnHighlightDate: React.PropTypes.func,
     onSelectDate: React.PropTypes.func,
+    fullDayStates: React.PropTypes.bool,
   },
 
   getInitialState() {
@@ -156,6 +157,7 @@ const CalendarDate = React.createClass({
     let numStates = states.count();
     let cellStyle = {};
     let style = {};
+    let customClass;
 
     let highlightModifier;
     let selectionModifier;
@@ -178,17 +180,18 @@ const CalendarDate = React.createClass({
     if (this.props.fullDayStates || numStates === 1) {
       // If there's only one state, it means we're not at a boundary
       color = states.getIn([0, 'color']);
+      customClass = states.getIn([0, 'customClass']);
 
       if (color) {
-
         style = {
           backgroundColor: color,
         };
         cellStyle = {
           borderLeftColor: lightenDarkenColor(color, -10),
           borderRightColor: lightenDarkenColor(color, -10),
-        };
+        }; 
       }
+      
     } else {
       amColor = states.getIn([0, 'color']);
       pmColor = states.getIn([1, 'color']);
@@ -201,7 +204,10 @@ const CalendarDate = React.createClass({
         cellStyle.borderRightColor = lightenDarkenColor(pmColor, -10);
       }
     }
-
+    let elementClass = this.cx({element: "FullDateStates"});
+    if (customClass) {
+      elementClass += ' '+customClass;
+    }
     return (
       <td className={this.cx({element: 'Date', modifiers: bemModifiers, states: bemStates})}
         style={cellStyle}
@@ -215,7 +221,7 @@ const CalendarDate = React.createClass({
             <CalendarDatePeriod period="pm" color={pmColor} />
           </div>}
         {numStates === 1 &&
-          <div className={this.cx({element: "FullDateStates"})} style={style} />}
+          <div className={elementClass} style={style} />}
         <span className={this.cx({element: "DateLabel"})}>{date.format('D')}</span>
         {selectionModifier ? <CalendarSelection modifier={selectionModifier} pending={pending} /> : null}
         {highlightModifier ? <CalendarHighlight modifier={highlightModifier} /> : null}
